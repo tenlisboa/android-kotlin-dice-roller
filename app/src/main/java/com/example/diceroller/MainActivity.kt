@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.diceroller.ui.AppBar
 import com.example.diceroller.ui.theme.DiceRollerTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
+fun DiceWithButtonAndImage(dices: Int, modifier: Modifier = Modifier) {
     var result by remember { mutableIntStateOf(1) }
 
     val imageResource = when (result) {
@@ -49,7 +50,10 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
     }
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(painter = painterResource(imageResource), contentDescription = stringResource(R.string.dice))
+        Image(
+            painter = painterResource(imageResource),
+            contentDescription = stringResource(R.string.dice)
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick = { result = (1..6).random() }) {
             Text(text = stringResource(R.string.roll))
@@ -60,7 +64,15 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun DiceRollerApp() {
-    DiceWithButtonAndImage(modifier = Modifier
-        .fillMaxSize()
-        .wrapContentSize(Alignment.Center))
+    var diceCount by remember {
+        mutableIntStateOf(1)
+    }
+
+    AppBar(onOptionSelected = { diceCount = it })
+    DiceWithButtonAndImage(
+        dices = diceCount,
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    )
 }
